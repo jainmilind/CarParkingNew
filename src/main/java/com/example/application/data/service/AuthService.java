@@ -7,6 +7,7 @@ import com.example.application.views.home.HomeView;
 import com.example.application.views.logout.LogoutView;
 import com.example.application.views.main.MainView;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.mail.MailSender;

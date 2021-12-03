@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.vaadin.artur.exampledata.DataType;
 import org.vaadin.artur.exampledata.ExampleDataGenerator;
 
+import javax.management.Notification;
+
 @SpringComponent
 public class DataGenerator {
 
@@ -42,8 +44,12 @@ public class DataGenerator {
             personRepositoryGenerator.setData(Person::setOccupation, DataType.OCCUPATION);
             personRepository.saveAll(personRepositoryGenerator.create(100, seed));
 
-            userRepository.save(new User("user", "u", Role.USER));
-            userRepository.save(new User("admin", "a", Role.ADMIN));
+            User user = new User("user", "u", Role.USER);
+            user.setActive(true);
+            userRepository.save(user);
+            User admin = new User("admin", "a", Role.ADMIN);
+            admin.setActive(true);
+            userRepository.save(admin);
 
             logger.info("Generated demo data");
         };
