@@ -19,10 +19,9 @@ import com.vaadin.flow.server.VaadinSession;
 public class DashboardView extends Div {
     public DashboardView() {
         //TODO: Fix null pointer exception for Worker
-        User user = VaadinSession.getCurrent().getAttribute(User.class);
-
-        TextField role = new TextField("Role");
         try {
+            User user = VaadinSession.getCurrent().getAttribute(User.class);
+            TextField role = new TextField("Role");
             VerticalLayout imageHolder = new VerticalLayout();
             Image avatar = new Image();
             if (user.getRole().equals(Role.USER)) {
@@ -60,13 +59,13 @@ public class DashboardView extends Div {
             mobile.setValue(user.getMobile());
             mobile.setReadOnly(true);
 
-            TextField registrationNumber = new TextField("Car registration number");
-            registrationNumber.setValue(user.getRegistrationNumber());
-            registrationNumber.setReadOnly(true);
-
             FormLayout formLayout;
-            if (user.getRole() == Role.USER)
+            if (user.getRole() == Role.USER) {
+                TextField registrationNumber = new TextField("Car registration number");
+                registrationNumber.setValue(user.getRegistrationNumber());
+                registrationNumber.setReadOnly(true);
                 formLayout = new FormLayout(imageHolder, username, address, email, mobile, registrationNumber);
+            }
             else
                 formLayout = new FormLayout(imageHolder, username, address, email, mobile);
 

@@ -10,22 +10,18 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.internal.Pair;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @PageTitle("Home")
@@ -51,10 +47,10 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
 
 
         startDateTimePicker = new DateTimePicker("Start date and time");
-        startDateTimePicker.setValue(LocalDateTime.of(2020, 8, 25, 20, 0, 0));
+        startDateTimePicker.setValue(LocalDateTime.of(2021, 12, 8, 20, 0, 0));
 
         endDateTimePicker = new DateTimePicker("End date and time");
-        endDateTimePicker.setValue(LocalDateTime.of(2020, 9, 1, 20, 0, 0));
+        endDateTimePicker.setValue(LocalDateTime.of(2021, 12, 8, 22, 0, 0));
 
         startDateTimePicker.addValueChangeListener(e -> {
             endDateTimePicker.setMin(e.getValue().plusHours(1));

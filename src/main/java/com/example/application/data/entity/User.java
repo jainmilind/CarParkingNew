@@ -57,7 +57,6 @@ public class User extends AbstractEntity {
                 put("Brake Fluid Top-Up", 100);
             }};
         } else {
-
             this.registrationNumber = last;
         }
     }
