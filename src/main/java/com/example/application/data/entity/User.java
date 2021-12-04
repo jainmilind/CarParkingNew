@@ -6,6 +6,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class User extends AbstractEntity {
@@ -22,11 +24,16 @@ public class User extends AbstractEntity {
     private String registrationNumber;
     private String activationCode;
     private boolean active;
+    private double rating;
+    public Map<String, Integer> services;
+    private String location;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String username, String password, Role role, String address, String mobile, String email, String registrationNumber) {
+    // For user
+    public User(String firstName, String lastName, String username, String password, Role role, String address,
+                String mobile, String email, String last) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -37,16 +44,23 @@ public class User extends AbstractEntity {
         this.address = address;
         this.mobile = mobile;
         this.email = email;
-        this.registrationNumber = registrationNumber;
-    }
+        if (role == Role.WORKER) {
+            this.location = last;
+            this.rating = -1;
+            this.services = new HashMap<String, Integer>() {{
+                put("Dry Cleaning", 250);
+                put("Car Washing", 500);
+                put("Disc Tuning", 500);
+                put("Engine Oil Replacement", 250);
+                put("Oil Filter Replacement", 150);
+                put("AC Filter Cleaning", 100);
+                put("Brake Fluid Top-Up", 100);
+            }};
+        } else {
 
-//    public User(String username, String password, Role role) {
-//        this.username = username;
-//        this.role = role;
-//        this.passwordSalt = RandomStringUtils.random(32);
-//        this.passwordHash = DigestUtils.sha1Hex(password + passwordSalt);
-//        this.activationCode = RandomStringUtils.randomAlphanumeric(32);
-//    }
+            this.registrationNumber = last;
+        }
+    }
 
     public boolean checkPassword(String password) {
         return DigestUtils.sha1Hex(password + passwordSalt).equals(passwordHash);
@@ -148,4 +162,28 @@ public class User extends AbstractEntity {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+//    public Integer getServices(String service) {
+//        return services[service];
+//    }
+//
+//    public void setServices(Map<String,Integer> services) {
+//
+//    }
 }

@@ -7,7 +7,9 @@ import com.example.application.views.dashboard.DashboardView;
 import com.example.application.views.home.HomeView;
 import com.example.application.views.logout.LogoutView;
 import com.example.application.views.main.MainView;
+import com.example.application.views.worker.WorkerView;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.mail.MailSender;
@@ -40,6 +42,7 @@ public class AuthService {
         User user = userRepository.getByUsername(username);
         if (user != null && user.checkPassword(password) && user.isActive()) {
             VaadinSession.getCurrent().setAttribute(User.class, user);
+//            Notification.show(username + " got authenticated!");
             createRoutes(user.getRole());
         } else {
             throw new AuthException();
@@ -66,7 +69,11 @@ public class AuthService {
             routes.add(new AuthorizedRoute("dashboard", "Dashboard", DashboardView.class));
             routes.add(new AuthorizedRoute("admin", "Admin", AdminView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
-
+        } else if (role.equals(Role.WORKER)) {
+            routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
+            routes.add(new AuthorizedRoute("dashboard", "Dashboard", DashboardView.class));
+            routes.add(new AuthorizedRoute("worker", "Employee", WorkerView.class));
+            routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
         }
 
         return routes;

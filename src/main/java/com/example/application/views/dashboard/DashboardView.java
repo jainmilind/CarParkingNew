@@ -7,6 +7,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -16,9 +18,12 @@ import com.vaadin.flow.server.VaadinSession;
 @PageTitle("Dashboard")
 public class DashboardView extends Div {
     public DashboardView() {
+        //TODO: Fix null pointer exception for Worker
         User user = VaadinSession.getCurrent().getAttribute(User.class);
+
         TextField role = new TextField("Role");
         try {
+            VerticalLayout imageHolder = new VerticalLayout();
             Image avatar = new Image();
             if (user.getRole().equals(Role.USER)) {
                 avatar.setSrc("images/man.png");
@@ -30,9 +35,12 @@ public class DashboardView extends Div {
                 avatar.setSrc("images/worker.png");
                 role.setValue("Worker");
             }
+            avatar.setMaxHeight("250px");
+            imageHolder.add(avatar);
 
             H2 title = new H2(user.getFirstName() + " " + user.getLastName());
-            title.getStyle().set("align-self", "flex-start");
+            imageHolder.add(title);
+            imageHolder.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
 
             TextField username = new TextField("Username");
             username.setValue(user.getUsername());
@@ -56,29 +64,23 @@ public class DashboardView extends Div {
             registrationNumber.setValue(user.getRegistrationNumber());
             registrationNumber.setReadOnly(true);
 
-            // Create a FormLayout with all our components. The FormLayout doesn't have any
-            // logic (validation, etc.), but it allows us to configure Responsiveness from
-            // Java code and its defaults looks nicer than just using a VerticalLayout.
-            FormLayout formLayout = new FormLayout(avatar, title, username,
-                    address, email, mobile, registrationNumber);
+            FormLayout formLayout;
+            if (user.getRole() == Role.USER)
+                formLayout = new FormLayout(imageHolder, username, address, email, mobile, registrationNumber);
+            else
+                formLayout = new FormLayout(imageHolder, username, address, email, mobile);
 
-            // Restrict maximum width and center on page
             formLayout.setMaxWidth("500px");
             formLayout.getStyle().set("margin", "0 auto");
 
-            // Allow the form layout to be responsive. On device widths 0-490px we have one
-            // column, then we have two. Field labels are always on top of the fields.
             formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
                     new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
 
-            // These components take full width regardless if we use one column or two (it
-            // just looks better that way)
-            formLayout.setColspan(title, 2);
+            formLayout.setColspan(imageHolder, 2);
 
-            // Add the form to the page
             add(formLayout);
-        } catch(Exception e) {
-            Notification.show("Error");
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
         }
 
     }

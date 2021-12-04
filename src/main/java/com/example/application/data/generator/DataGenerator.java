@@ -17,19 +17,23 @@ public class DataGenerator {
         return args -> {
 
 
-            User newUser = new User("Mili", "Kun", "user", "pass",
-                    Role.USER, "a", "9969696969", "a@b.in", "z");
+            User newUser = new User("Milind", "Jain", "user", "pass",
+                    Role.USER, "VM282 \nBITS Pilani Hyderabad Campus", "7008899665", "jainmilind@gmail.com", "TL-105");
             newUser.setActive(true);
             userRepository.save(newUser);
             //firstName, lastName, username, password, Role.USER, address, mobile, email, registrationNumber
-            User newAdmin = new User("Bhagwan", "Singh", "admin", "pass",
-                    Role.ADMIN, "Heaven", "1234567890", "jesus@god.hv", "000");
+            User newAdmin = new User("Sai", "Panda", "admin", "pass",
+                    Role.ADMIN, "V281 \nBITS Pilani Hyderabad Campus", "1234567890", "jesus@god.hv", "000");
             newAdmin.setActive(true);
             userRepository.save(newAdmin);
 
-            parkingSlotRepository.save(new ParkingSlot("images/RGIA.jpg", "RGIA", 200, 10));
-            parkingSlotRepository.save(new ParkingSlot("images/BITS.jfif", "BITS", 150, 20));
+            parkingSlotRepository.save(new ParkingSlot("images/RGIA.jpg", "Rajiv Gandhi International Airport", 200, 10));
+            parkingSlotRepository.save(new ParkingSlot("images/BITS.jfif", "BITS Pilani Hyderabad Campus", 150, 20));
 
+            User newWorker = new User("Hard", "Worker", "worker", "pass",
+                    Role.WORKER, "Mess3 \nBITS Pilani Hyderabad Campus", "9131231231", "union@work.to", "Rajiv Gandhi International Airport");
+            newWorker.setActive(true);
+            userRepository.save(newWorker);
         };
     }
 
