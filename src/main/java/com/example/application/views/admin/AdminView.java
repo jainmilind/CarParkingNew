@@ -28,6 +28,7 @@ import java.util.Optional;
 @CssImport("./styles/views/admin/admin-view.css")
 public class AdminView extends Div {
 
+    //    private Grid<User> grid;
     private Grid<Person> grid;
 
     private TextField firstName = new TextField("First name");
@@ -36,6 +37,15 @@ public class AdminView extends Div {
     private TextField phone = new TextField("Phone");
     private DatePicker dateOfBirth = new DatePicker("Date of birth");
     private TextField occupation = new TextField("Occupation");
+    //      TODO: Change CRUD to display workers
+    //    private TextField firstName = new TextField("First name");
+    //    private TextField lastName = new TextField("Last name");
+    //    private TextField username = new TextField("Username");
+    //    private PasswordField password = new PasswordField("Password");
+    //    private TextArea address = new TextArea("Address");
+    //    private TextField email = new TextField("Email");
+    //    private TextField mobile = new TextField("Mobile number");
+    //    private TextField location = new TextField("Location");
 
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
@@ -116,7 +126,7 @@ public class AdminView extends Div {
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        AbstractField[] fields = new AbstractField[] { firstName, lastName, email, phone, dateOfBirth, occupation };
+        AbstractField[] fields = new AbstractField[]{firstName, lastName, email, phone, dateOfBirth, occupation};
         for (AbstractField field : fields) {
             ((HasStyle) field).addClassName("full-width");
         }

@@ -3,19 +3,11 @@ package com.example.application.views.login;
 import com.example.application.data.service.AuthService;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 
 @Route(value = "login")
 @PageTitle("Login")
@@ -23,23 +15,6 @@ import com.vaadin.flow.router.RouterLink;
 public class LoginView extends Composite<LoginOverlay> {
 
     public LoginView(AuthService authService) {
-//        setId("login-view");
-//        var username = new TextField("Username");
-//        var password = new PasswordField("Password");
-//        add(
-//                new H1("Welcome"),
-//                username,
-//                password,
-//                new Button("Login", event -> {
-//                    try {
-//                        authService.authenticate(username.getValue(), password.getValue());
-//                        UI.getCurrent().navigate("home");
-//                    } catch (AuthService.AuthException e) {
-//                        Notification.show("Wrong credentials.");
-//                    }
-//                }),
-//                new RouterLink("Register", RegisterView.class)
-//        );
         LoginOverlay loginOverlay = getContent();
         LoginI18n i18n = LoginI18n.createDefault();
 
@@ -52,7 +27,7 @@ public class LoginView extends Composite<LoginOverlay> {
                 authService.authenticate(event.getUsername(), event.getPassword());
                 UI.getCurrent().navigate("home");
             } catch (AuthService.AuthException e) {
-//                Notification.show("Wrong credentials."); // setError looks more sexy
+                //                Notification.show("Wrong credentials."); // setError looks more sexy
                 loginOverlay.setError(true);
             }
         });
@@ -60,14 +35,8 @@ public class LoginView extends Composite<LoginOverlay> {
         i18n.getForm().setForgotPassword("Sign Up");
         loginOverlay.setForgotPasswordButtonVisible(true);
         loginOverlay.addForgotPasswordListener(event -> {
-            //TODO :make sign up button functional
             UI.getCurrent().navigate("register");
             loginOverlay.close(); // Just testing if sign up button is working or not
-//            try {
-//                UI.getCurrent().navigate("home");
-//            } catch (AuthService.AuthException e) {
-//                Notification.show("Wrong credentials.");
-//            }
         });
         loginOverlay.setI18n(i18n);
     }
