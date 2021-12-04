@@ -44,12 +44,13 @@ public class DataGenerator {
             personRepositoryGenerator.setData(Person::setOccupation, DataType.OCCUPATION);
             personRepository.saveAll(personRepositoryGenerator.create(100, seed));
 
-            User user = new User("user", "u", Role.USER);
-            user.setActive(true);
-            userRepository.save(user);
-            User admin = new User("admin", "a", Role.ADMIN);
-            admin.setActive(true);
-            userRepository.save(admin);
+           User newUser = new User("Mili", "Kun", "user", "pass",
+                    Role.USER, "a", "1", "a@b.in", "z");
+            newUser.setActive(true);
+            userRepository.save(newUser);
+//            User admin = new User("admin", "a", Role.ADMIN);
+//            admin.setActive(true);
+//            userRepository.save(admin);
 
             logger.info("Generated demo data");
         };

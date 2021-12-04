@@ -52,11 +52,24 @@ public class LoginView extends Composite<LoginOverlay> {
                 authService.authenticate(event.getUsername(), event.getPassword());
                 UI.getCurrent().navigate("home");
             } catch (AuthService.AuthException e) {
-                Notification.show("Wrong credentials.");
+//                Notification.show("Wrong credentials."); // setError looks more sexy
+                loginOverlay.setError(true);
             }
         });
 
-
+        i18n.getForm().setForgotPassword("Sign Up");
+        loginOverlay.setForgotPasswordButtonVisible(true);
+        loginOverlay.addForgotPasswordListener(event -> {
+            //TODO :make sign up button functional
+            UI.getCurrent().navigate("register");
+            loginOverlay.close(); // Just testing if sign up button is working or not
+//            try {
+//                UI.getCurrent().navigate("home");
+//            } catch (AuthService.AuthException e) {
+//                Notification.show("Wrong credentials.");
+//            }
+        });
+        loginOverlay.setI18n(i18n);
     }
 
 }
