@@ -17,8 +17,12 @@
 .home-view img {
   border-radius: 50%;
   flex-shrink: 0;
-  height: var(--lumo-size-m);
-  width: var(--lumo-size-m);
+  max-height: 400px;
+  max-width: 400px;
+  /*height: var(--lumo-size-xl);*/
+  /*width: var(--lumo-size-xl);*/
+  height: 10rem;
+  width: 10rem;
 }
 
 .home-view .header {
@@ -26,7 +30,7 @@
 }
 
 .home-view .name {
-  font-size: var(--lumo-font-size-s);
+  font-size: var(--lumo-font-size-m);
   font-weight: bold;
 }
 

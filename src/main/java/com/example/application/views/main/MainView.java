@@ -71,8 +71,8 @@ public class MainView extends AppLayout {
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "auth-example logo"));
-        logoLayout.add(new H1("auth-example"));
+        logoLayout.add(new Image("images/car-solid.svg", "CarParking.Com logo"));
+        logoLayout.add(new H1("CarParking.Com"));
         layout.add(logoLayout, menu);
         return layout;
     }
