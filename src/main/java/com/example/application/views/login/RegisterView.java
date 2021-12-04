@@ -1,28 +1,31 @@
 package com.example.application.views.login;
 
 import com.example.application.data.service.AuthService;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.*;
+import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import java.util.regex.Pattern;
 
 @Route("register")
-public class RegisterView extends Composite {
+public class RegisterView extends VerticalLayout {
 
     private final AuthService authService;
-
+//    private Component formLayout;
     public RegisterView(AuthService authService) {
         this.authService = authService;
-    }
 
-    @Override
-    protected Component initContent() {
+        H3 title = new H3("Signup form");
+
         TextField firstName = new TextField("First Name");
         TextField lastName = new TextField("Last Name");
         TextField username = new TextField("Username");
@@ -33,18 +36,9 @@ public class RegisterView extends Composite {
         TextField mobile = new TextField("Mobile number");
         TextField registrationNumber = new TextField("Car registration number");
 
-        return new VerticalLayout(
-                new H2("Register"),
-                firstName,
-                lastName,
-                username,
-                password1,
-                password2,
-                address,
-                email,
-                mobile,
-                registrationNumber,
-                new Button("Send", event -> register(
+        Span errorMessage = new Span();
+
+        Button submitButton = new Button("Submit" , event -> register(
                         firstName.getValue(),
                         lastName.getValue(),
                         username.getValue(),
@@ -54,9 +48,38 @@ public class RegisterView extends Composite {
                         mobile.getValue(),
                         email.getValue(),
                         registrationNumber.getValue()
-                ))
-        );
+                ));
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        // Create a FormLayout with all our components. The FormLayout doesn't have any
+        // logic (validation, etc.), but it allows us to configure Responsiveness from
+        // Java code and its defaults looks nicer than just using a VerticalLayout.
+        FormLayout formLayout = new FormLayout(title, firstName, lastName, username, password1, password2,
+                address, email, mobile, registrationNumber,submitButton);
+
+        // Restrict maximum width and center on page
+        formLayout.setMaxWidth("500px");
+        formLayout.getStyle().set("margin", "0 auto");
+
+        // Allow the form layout to be responsive. On device widths 0-490px we have one
+        // column, then we have two. Field labels are always on top of the fields.
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
+                new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+
+        // These components take full width regardless if we use one column or two (it
+        // just looks better that way)
+        formLayout.setColspan(title, 2);
+        formLayout.setColspan(errorMessage, 2);
+        formLayout.setColspan(submitButton, 2);
+
+        // Add some styles to the error message to make it pop out
+        errorMessage.getStyle().set("color", "var(--lumo-error-text-color)");
+        errorMessage.getStyle().set("padding", "15px 0");
+
+        // Add the form to the page
+        add(formLayout);
     }
+
     private boolean validateFields(String firstName, String lastName, String username, String password1, String password2,
                           String address, String mobile, String email, String registrationNumber) {
         if (firstName.trim().isEmpty()) {
