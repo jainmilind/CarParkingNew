@@ -4,7 +4,7 @@ import com.example.application.data.service.AuthService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,7 +24,7 @@ public class RegisterView extends VerticalLayout {
     public RegisterView(AuthService authService) {
         this.authService = authService;
 
-        H3 title = new H3("Signup form");
+        H2 title = new H2("Signup Form");
 
         TextField firstName = new TextField("First Name");
         TextField lastName = new TextField("Last Name");
