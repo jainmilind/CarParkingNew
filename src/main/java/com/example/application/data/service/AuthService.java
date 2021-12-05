@@ -42,7 +42,6 @@ public class AuthService {
         User user = userRepository.getByUsername(username);
         if (user != null && user.checkPassword(password) && user.isActive()) {
             VaadinSession.getCurrent().setAttribute(User.class, user);
-            Notification.show("Not null: " + (user != null));
             createRoutes(user.getRole());
         } else {
             throw new AuthException();

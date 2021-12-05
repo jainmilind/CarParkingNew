@@ -15,7 +15,8 @@ public class WorkerView extends Div {
     public WorkerView() {
         //TODO: Fix null pointer exception for Worker
         H2 title = new H2("My Services");
-        Map<String, Integer> services = VaadinSession.getCurrent().getAttribute(User.class).services;
+        User worker = VaadinSession.getCurrent().getAttribute(User.class);
+        Map<String, Integer> services = User.services.get(worker.getUsername());
         for (Map.Entry<String, Integer> entry : services.entrySet()) {
 
             IntegerField dollarField = new IntegerField();

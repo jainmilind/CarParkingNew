@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class RegisterView extends VerticalLayout {
 
     private final AuthService authService;
-//    private Component formLayout;
+    //    private Component formLayout;
     public RegisterView(AuthService authService) {
         this.authService = authService;
 
@@ -39,16 +39,16 @@ public class RegisterView extends VerticalLayout {
         Span errorMessage = new Span();
 
         Button submitButton = new Button("Submit" , event -> register(
-                        firstName.getValue(),
-                        lastName.getValue(),
-                        username.getValue(),
-                        password1.getValue(),
-                        password2.getValue(),
-                        address.getValue(),
-                        mobile.getValue(),
-                        email.getValue(),
-                        registrationNumber.getValue()
-                ));
+                firstName.getValue(),
+                lastName.getValue(),
+                username.getValue(),
+                password1.getValue(),
+                password2.getValue(),
+                address.getValue(),
+                mobile.getValue(),
+                email.getValue(),
+                registrationNumber.getValue()
+        ));
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         // Create a FormLayout with all our components. The FormLayout doesn't have any
@@ -81,7 +81,7 @@ public class RegisterView extends VerticalLayout {
     }
 
     private boolean validateFields(String firstName, String lastName, String username, String password1, String password2,
-                          String address, String mobile, String email, String registrationNumber) {
+                                   String address, String mobile, String email, String registrationNumber) {
         if (firstName.trim().isEmpty()) {
             Notification.show("Enter a first name");
             return false;
@@ -112,7 +112,7 @@ public class RegisterView extends VerticalLayout {
         if (validateFields(firstName, lastName, username, password1, password2,
                 address, mobile, email, registrationNumber)) {
             authService.register(firstName, lastName, username, password1,
-                address, mobile, email, registrationNumber);
+                    address, mobile, email, registrationNumber);
             Notification.show("Check your email.");
         }
     }

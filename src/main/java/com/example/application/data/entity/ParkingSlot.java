@@ -20,14 +20,12 @@ public class ParkingSlot extends AbstractEntity {
     private String image;
     private String name;
     private int price;
-    @OneToMany
-    private ArrayList<User> workers = new ArrayList<User>();
+    public static Map<String, ArrayList<User>> workers = new HashMap<>();
     private int totalSpots;
 
     static private final Map<String, Map<LocalDateTime, Integer>> spotsBooked = new HashMap<>();
 
-    @OneToMany
-    private ArrayList<User> customers = new ArrayList<>();
+    private static Map<String, ArrayList<User>> customers = new HashMap<>();
 
     public int getTotalSpots() {
         return totalSpots;
@@ -84,12 +82,14 @@ public class ParkingSlot extends AbstractEntity {
         return true;
     }
 
-    public void addBooking(Pair<LocalDateTime, LocalDateTime> p) {
+    public void addBooking(Pair<LocalDateTime, LocalDateTime> p, User customer) {
 
         for(LocalDateTime time = p.getFirst(); time.isBefore(p.getSecond()); time = time.plusHours(1)) {
             spotsBooked.get(name).putIfAbsent(time, 0);
             spotsBooked.get(name).put(time, (spotsBooked.get(name).get(time) + 1));
         }
+        customers.putIfAbsent(name, new ArrayList<>());
+        customers.get(name).add(customer);
     }
 
     public String nextAvailability(Pair<LocalDateTime, LocalDateTime> p){
@@ -125,5 +125,10 @@ public class ParkingSlot extends AbstractEntity {
     public int bookedAt(LocalDateTime time){
         spotsBooked.get(name).putIfAbsent(time, 0);
         return spotsBooked.get(name).get(time);
+    }
+
+    public void addWorker(User user){
+        workers.putIfAbsent(name, new ArrayList<>());
+        workers.get(name).add(user);
     }
 }

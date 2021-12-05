@@ -25,7 +25,8 @@ public class User extends AbstractEntity {
     private String activationCode;
     private boolean active;
     private double rating;
-    public Map<String, Integer> services;
+    private int userRatings;
+    public static  Map<String, Map<String, Integer>> services = new HashMap<>();
     private String location;
 
     public User() {
@@ -44,10 +45,10 @@ public class User extends AbstractEntity {
         this.address = address;
         this.mobile = mobile;
         this.email = email;
-        if (role == Role.WORKER) {
+        if (this.role == Role.WORKER) {
             this.location = last;
             this.rating = -1;
-            this.services = new HashMap<String, Integer>() {{
+            services.putIfAbsent(username, new HashMap<>() {{
                 put("Dry Cleaning", 250);
                 put("Car Washing", 500);
                 put("Disc Tuning", 500);
@@ -55,8 +56,11 @@ public class User extends AbstractEntity {
                 put("Oil Filter Replacement", 150);
                 put("AC Filter Cleaning", 100);
                 put("Brake Fluid Top-Up", 100);
-            }};
+            }});
+            this.userRatings = 0;
+            this.registrationNumber = "";
         } else {
+
             this.registrationNumber = last;
         }
     }
@@ -178,11 +182,16 @@ public class User extends AbstractEntity {
         this.location = location;
     }
 
-//    public Integer getServices(String service) {
-//        return services[service];
-//    }
-//
-//    public void setServices(Map<String,Integer> services) {
-//
-//    }
+    public String retName() {
+        return firstName + " " + lastName;
+    }
+
+    public int getUserRatings() {
+        return userRatings;
+    }
+
+    public void setUserRatings(int userRatings) {
+        this.userRatings = userRatings;
+    }
+    
 }

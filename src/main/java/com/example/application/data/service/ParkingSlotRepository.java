@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ParkingSlotRepository extends JpaRepository<ParkingSlot, Long> {
 
-    List<ParkingSlot> getByName(String name);
+    ParkingSlot getByName(String name);
 }

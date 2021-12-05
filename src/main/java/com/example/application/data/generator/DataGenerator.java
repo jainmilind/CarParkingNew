@@ -33,7 +33,10 @@ public class DataGenerator {
             User newWorker = new User("Hard", "Worker", "worker", "pass",
                     Role.WORKER, "Mess3 \nBITS Pilani Hyderabad Campus", "9131231231", "union@work.to", "Rajiv Gandhi International Airport");
             newWorker.setActive(true);
+
             userRepository.save(newWorker);
+            parkingSlotRepository.getByName("Rajiv Gandhi International Airport").addWorker(newWorker);
+
         };
     }
 
