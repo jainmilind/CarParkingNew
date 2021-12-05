@@ -117,7 +117,7 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
                 new Label("Total Cost: Rs. " + parkingSlot.getPrice() * getDuration(p)),
                 new Label("Total spots: " + parkingSlot.getTotalSpots()),
                 new Label(parkingSlot.nextAvailability(p))
-                );
+        );
         description.setPadding(true);
         card.add(image, description, bookSlot);
 
@@ -125,9 +125,9 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
     }
 
 
-    private int getDuration(Pair<LocalDateTime, LocalDateTime> p){
+    private int getDuration(Pair<LocalDateTime, LocalDateTime> p) {
         int duration = 0;
-        while(p.getFirst().plusHours(duration).isBefore(p.getSecond())){
+        while (p.getFirst().plusHours(duration).isBefore(p.getSecond())) {
             duration++;
         }
         return duration;
@@ -149,13 +149,11 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
     }
 
 
+    private void updateGrid() {
 
-    private void updateGrid(){
-
-        if(locations.isEmpty() || locations.getValue().equals("All")){
+        if (locations.isEmpty() || locations.getValue().equals("All")) {
             grid.setItems(parkingSlotRepository.findAll());
-        }
-        else{
+        } else {
             grid.setItems(parkingSlotRepository.getByName(locations.getValue()));
         }
     }

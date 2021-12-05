@@ -23,8 +23,9 @@ public class User extends AbstractEntity {
     private String activationCode;
     private boolean active;
     private double rating;
-    private int[] prices;
-    private String[] services;
+    int[] prices;
+    String[] services;
+//    private transient List<CarService> services;
     private String location;
 
     public User() {
@@ -58,14 +59,14 @@ public class User extends AbstractEntity {
             setPrices(new int[] {
                     250, 500, 500, 250, 150, 100, 100
             });
-//            services.putIfAbsent(this.username, new HashMap<>());
-//            services.get(this.username).put("Dry Cleaning", 250);
-//            services.get(this.username).put("Car Washing", 500);
-//            services.get(this.username).put("Disc Tuning", 500);
-//            services.get(this.username).put("Engine Oil Replacement", 250);
-//            services.get(this.username).put("Oil Filter Replacement", 150);
-//            services.get(this.username).put("AC Filter Cleaning", 100);
-//            services.get(this.username).put("Brake Fluid Top-Up", 100);
+//            services = new ArrayList<>();
+//            services.add(new CarService("Dry Cleaning", 250));
+//            services.add(new CarService("Car Washing", 500));
+//            services.add(new CarService("Disc Tuning", 500));
+//            services.add(new CarService("Engine Oil Replacement", 250));
+//            services.add(new CarService("Oil Filter Replacement", 150));
+//            services.add(new CarService("AC Filter Cleaning", 100));
+//            services.add(new CarService("Brake Fluid Top-Up", 100));
         } else {
             this.registrationNumber = last;
         }
@@ -187,6 +188,14 @@ public class User extends AbstractEntity {
     public void setLocation(String location) {
         this.location = location;
     }
+
+//    public List<CarService> getServices() {
+//        return services;
+//    }
+//
+//    public void setServices(List<CarService> services) {
+//        this.services = services;
+//    }
 
     public int[] getPrices() {
         return prices;
