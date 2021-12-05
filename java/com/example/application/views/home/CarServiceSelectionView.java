@@ -47,8 +47,7 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
 
         Button done = new Button("Done");
         done.addClickListener(e -> {
-            int totalCost = User.servicesSelected.get(customer.getUsername()).stream().mapToInt(CarService::getServiceCharge).sum();
-            Notification.show("You have to pay " + totalCost);
+            UI.getCurrent().navigate(BillSummaryView.class);
         });
 
         add(
@@ -90,12 +89,14 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
         Button selectService = new Button("Select");
         selectService.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         selectService.setWidth("25%");
-        selectService.setVisible(true);
+        selectService.setVisible(
+                User.servicesSelected.get(customer.getUsername()) == null
+                        || User.servicesSelected.get(customer.getUsername()).contains(carService));
 
         Button unselectService = new Button("Unselect");
         unselectService.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         unselectService.setWidth("25%");
-        unselectService.setVisible(false);
+        unselectService.setVisible(!selectService.isVisible());
 
         selectService.addClickListener(e -> {
             //TODO: Implement navigation to payment view
