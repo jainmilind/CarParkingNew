@@ -1,11 +1,15 @@
 package com.example.application.data.entity;
 
 import com.example.application.data.AbstractEntity;
+import com.vaadin.flow.component.notification.Notification;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class User extends AbstractEntity {
@@ -23,9 +27,9 @@ public class User extends AbstractEntity {
     private String activationCode;
     private boolean active;
     private double rating;
-    int[] prices;
-    String[] services;
-//    private transient List<CarService> services;
+    private int userRatings;
+    public static  Map<String, ArrayList<CarService>> services = new HashMap<>();
+    public static  Map<String, ArrayList<CarService>> servicesSelected = new HashMap<>();
     private String location;
 
     public User() {
@@ -44,30 +48,21 @@ public class User extends AbstractEntity {
         this.address = address;
         this.mobile = mobile;
         this.email = email;
-        if (role == Role.WORKER) {
+        if (this.role == Role.WORKER) {
             this.location = last;
             this.rating = -1;
-            setServices(new String[] {
-                    "Dry Cleaning",
-                    "Car Washing",
-                    "Disc Tuning",
-                    "Engine Oil Replacement",
-                    "Oil Filter Replacement",
-                    "AC Filter Cleaning",
-                    "Brake Fluid Top-Up"
-            });
-            setPrices(new int[] {
-                    250, 500, 500, 250, 150, 100, 100
-            });
-//            services = new ArrayList<>();
-//            services.add(new CarService("Dry Cleaning", 250));
-//            services.add(new CarService("Car Washing", 500));
-//            services.add(new CarService("Disc Tuning", 500));
-//            services.add(new CarService("Engine Oil Replacement", 250));
-//            services.add(new CarService("Oil Filter Replacement", 150));
-//            services.add(new CarService("AC Filter Cleaning", 100));
-//            services.add(new CarService("Brake Fluid Top-Up", 100));
+            services.putIfAbsent(username, new ArrayList<>());
+            services.get(username).add(new CarService("Dry Cleaning", 250));
+            services.get(username).add(new CarService("Car Washing", 500));
+            services.get(username).add(new CarService("Disc Tuning", 500));
+            services.get(username).add(new CarService("Engine Oil Replacement", 250));
+            services.get(username).add(new CarService("Oil Filter Replacement", 150));
+            services.get(username).add(new CarService("AC Filter Cleaning", 100));
+            services.get(username).add(new CarService("Brake Fluid Top-Up", 100));
+            this.userRatings = 0;
+            this.registrationNumber = "";
         } else {
+
             this.registrationNumber = last;
         }
     }
@@ -189,32 +184,32 @@ public class User extends AbstractEntity {
         this.location = location;
     }
 
-//    public List<CarService> getServices() {
-//        return services;
-//    }
-//
-//    public void setServices(List<CarService> services) {
-//        this.services = services;
-//    }
-
-    public int[] getPrices() {
-        return prices;
+    public String retName() {
+        return firstName + " " + lastName;
     }
 
-    public void setPrices(int[] prices) {
-        this.prices = prices;
+    public int getUserRatings() {
+        return userRatings;
     }
 
-    public void setPrices(int index, int value) {
-        prices[index] = value;
+    public void setUserRatings(int userRatings) {
+        this.userRatings = userRatings;
     }
 
-    public String[] getServices() {
-        return services;
+    public void addCarService(CarService carService){
+
+        servicesSelected.putIfAbsent(username, new ArrayList<>());
+        servicesSelected.get(username).add(carService);
     }
 
-    public void setServices(String[] services) {
-        this.services = services;
+    public void removeCarService(CarService service){
+        if(servicesSelected.get(username) == null
+                || !servicesSelected.get(username).contains(service)){
+            Notification.show("Service not selected");
+        }
+        else{
+            servicesSelected.get(username).remove(service);
+        }
     }
 
 }

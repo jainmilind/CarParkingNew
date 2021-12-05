@@ -1,44 +1,46 @@
 package com.example.application.views.worker;
 
+import com.example.application.data.entity.CarService;
 import com.example.application.data.entity.User;
-import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.VaadinSession;
 
+import java.util.ArrayList;
+
 @PageTitle("Worker")
-public class WorkerView extends Div {
+@CssImport(value = "./styles/views/home/home-view.css", include = "lumo-badge")
+public class WorkerView extends VerticalLayout {
+
     public WorkerView() {
         //TODO: Fix null pointer exception for Worker
         H2 title = new H2("My Services");
-        User user = VaadinSession.getCurrent().getAttribute(User.class);
-        int[] prices = user.getPrices();
-        String[] services = user.getServices();
+        add(title);
+        User worker = VaadinSession.getCurrent().getAttribute(User.class);
+        ArrayList<CarService> services = User.services.get(worker.getUsername());
+        for (CarService service : services) {
 
-        FormLayout formLayout = new FormLayout();
-        formLayout.add(title);
-        for (int i = 0; i < prices.length; ++i) {
+            HorizontalLayout serviceLayout = new HorizontalLayout();
+            Label serviceName = new Label(service.getServiceName());
             IntegerField dollarField = new IntegerField();
-            dollarField.setValue(prices[i]);
+            dollarField.setValue(service.getServiceCharge());
             Div dollarPrefix = new Div();
             dollarPrefix.setText("₹");
             dollarField.setPrefixComponent(dollarPrefix);
-            int finalI = i;
-            dollarField.addValueChangeListener(event -> {
-                prices[finalI] = event.getValue();
-                user.setPrices(finalI, event.getValue());
-                Notification.show("Current value: " + user.getPrices()[finalI]);
-            });
-            formLayout.addFormItem(dollarField, services[i]);
+            serviceName.addClassName("service-name");
+            serviceLayout.add(serviceName, dollarField);
+            serviceLayout.setSpacing(true);
+            add(serviceLayout);
+            dollarField.addValueChangeListener(e -> service.setServiceCharge(dollarField.getValue()));
+
         }
-        formLayout.setMaxWidth("500px");
-        formLayout.getStyle().set("margin", "0 auto");
-        formLayout.setColspan(title, 2);
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
-                new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
-        add(formLayout);
+        setAlignItems(Alignment.CENTER);
+        addClassName("my-services-layout");
     }
 }

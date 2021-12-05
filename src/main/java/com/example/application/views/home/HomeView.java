@@ -1,7 +1,10 @@
 package com.example.application.views.home;
 
 import com.example.application.data.entity.ParkingSlot;
+import com.example.application.data.entity.User;
 import com.example.application.data.service.ParkingSlotRepository;
+import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -10,18 +13,23 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.internal.Pair;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.server.VaadinSession;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @PageTitle("Home")
@@ -47,10 +55,10 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
 
 
         startDateTimePicker = new DateTimePicker("Start date and time");
-        startDateTimePicker.setValue(LocalDateTime.of(2021, 12, 8, 20, 0, 0));
+        startDateTimePicker.setValue(LocalDateTime.of(2020, 8, 25, 20, 0, 0));
 
         endDateTimePicker = new DateTimePicker("End date and time");
-        endDateTimePicker.setValue(LocalDateTime.of(2021, 12, 8, 22, 0, 0));
+        endDateTimePicker.setValue(LocalDateTime.of(2020, 9, 1, 20, 0, 0));
 
         startDateTimePicker.addValueChangeListener(e -> {
             endDateTimePicker.setMin(e.getValue().plusHours(1));
@@ -101,7 +109,9 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
         bookSlot.setWidth("25%");
         bookSlot.setEnabled(parkingSlot.canBook(p));
         bookSlot.addClickListener(e -> {
-            parkingSlot.addBooking(p);
+            parkingSlot.addBooking(p, VaadinSession.getCurrent().getAttribute(User.class));
+            ComponentUtil.setData(UI.getCurrent(), ParkingSlot.class, parkingSlot);
+            UI.getCurrent().navigate(WorkerSelectionView.class);
             updateGrid();
         });
 
@@ -125,9 +135,9 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
     }
 
 
-    private int getDuration(Pair<LocalDateTime, LocalDateTime> p) {
+    private int getDuration(Pair<LocalDateTime, LocalDateTime> p){
         int duration = 0;
-        while (p.getFirst().plusHours(duration).isBefore(p.getSecond())) {
+        while(p.getFirst().plusHours(duration).isBefore(p.getSecond())){
             duration++;
         }
         return duration;
@@ -149,11 +159,13 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
     }
 
 
-    private void updateGrid() {
 
-        if (locations.isEmpty() || locations.getValue().equals("All")) {
+    private void updateGrid(){
+
+        if(locations.isEmpty() || locations.getValue().equals("All")){
             grid.setItems(parkingSlotRepository.findAll());
-        } else {
+        }
+        else{
             grid.setItems(parkingSlotRepository.getByName(locations.getValue()));
         }
     }
