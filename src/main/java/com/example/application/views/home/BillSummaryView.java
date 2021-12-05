@@ -39,7 +39,7 @@ public class BillSummaryView extends VerticalLayout {
 
         totalCost += parkingSlot.getPrice();
 
-        add(new H4("Total -" + totalCost));
+        add(new H4("Total -  " + totalCost));
 
         HorizontalLayout buttons = new HorizontalLayout();
 

@@ -27,13 +27,15 @@ public class DataGenerator {
             newAdmin.setActive(true);
             userRepository.save(newAdmin);
 
-            parkingSlotRepository.save(new ParkingSlot("images/RGIA.jpg", "Rajiv Gandhi International Airport", 200, 10));
-            parkingSlotRepository.save(new ParkingSlot("images/BITS.jfif", "BITS Pilani Hyderabad Campus", 150, 20));
-
             User newWorker = new User("Hard", "Worker", "worker", "pass",
                     Role.WORKER, "Mess3 \nBITS Pilani Hyderabad Campus", "9131231231", "union@work.to", "Rajiv Gandhi International Airport");
             newWorker.setActive(true);
             userRepository.save(newWorker);
+
+            parkingSlotRepository.save(new ParkingSlot("images/RGIA.jpg", "Rajiv Gandhi International Airport", 200, 10));
+            parkingSlotRepository.save(new ParkingSlot("images/BITS.jfif", "BITS Pilani Hyderabad Campus", 150, 20));
+
+            parkingSlotRepository.getByName("Rajiv Gandhi International Airport").addWorker(newWorker);
         };
     }
 

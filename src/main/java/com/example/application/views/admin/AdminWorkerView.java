@@ -1,43 +1,37 @@
-package com.example.application.views.home;
+package com.example.application.views.admin;
 
 import com.example.application.data.entity.ParkingSlot;
+import com.example.application.data.entity.Role;
 import com.example.application.data.entity.User;
 import com.example.application.data.service.UserRepository;
+import com.example.application.views.home.CarServiceSelectionView;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 
 import java.util.ArrayList;
 
-@PageTitle("Select Worker")
-@Route("worker-selection")
-@CssImport(value = "./styles/views/home/home-view.css", include = "lumo-badge")
-@JsModule("@vaadin/vaadin-lumo-styles/badge.js")
-public class WorkerSelectionView extends VerticalLayout implements AfterNavigationObserver{
+@PageTitle("Workers")
+public class AdminWorkerView extends VerticalLayout {
 
     Grid<User> grid = new Grid<>();
-    UserRepository workerRepository;
+    UserRepository userRepository;
     ParkingSlot parkingSlot;
     //TODO: Remove the vaadin session attribute
 
 
 
-    public WorkerSelectionView(UserRepository workerRepository) {
+    public AdminWorkerView(UserRepository userRepository) {
 
-        this.workerRepository = workerRepository;
+        this.userRepository = userRepository;
         parkingSlot = ComponentUtil.getData(UI.getCurrent(), ParkingSlot.class);
 
         setId("home-view");
@@ -47,14 +41,17 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
         grid.addComponentColumn(this::createCard);
 
-        ArrayList<User> workers = ParkingSlot.workers.get(parkingSlot.getName());
-        if(workers != null)
-            grid.setItems(ParkingSlot.workers.get(parkingSlot.getName()));
+        ArrayList<User> workers = userRepository.getAllByRole(Role.WORKER) ;
+        grid.setItems(workers);
+
+        Button addButton = new Button("Add Worker");
+        addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
+        addButton.addClickListener(e -> UI.getCurrent().navigate(NewWorkerForm.class));
 
         add(
-                new H2(parkingSlot.getName()),
-                new H4("Select Worker - " + ParkingSlot.workers.get(parkingSlot.getName()).size() + " workers"),
-                grid
+                new H2("Edit Workers"),
+                grid,
+                addButton
         );
     }
 
@@ -77,17 +74,16 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
         Span name = new Span(worker.retName());
         name.addClassName("name");
 
-        Span rating = new Span("Rating - " + worker.getRating());
-        rating.addClassName("rating");
+        Span username = new Span("Username - " + worker.getUsername());
+        username.addClassName("rating");
 
-        Button selectWorker = new Button("Select");
-        selectWorker.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        selectWorker.setWidth("25%");
-        selectWorker.addClickListener(e -> {
-            //TODO: Implement navigation to payment and services view
-            Notification.show("Worker " + worker.retName() + " selected");
-            ComponentUtil.setData(UI.getCurrent(), User.class, worker);
-            UI.getCurrent().navigate(CarServiceSelectionView.class);
+        Button deleteWorker = new Button("DELETE");
+        deleteWorker.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
+        deleteWorker.setWidth("25%");
+        deleteWorker.addClickListener(e -> {
+            parkingSlot.removeWorker(worker);
+            userRepository.delete(worker);
+            updateView();
         });
 
         HorizontalLayout actions = new HorizontalLayout();
@@ -97,20 +93,22 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
 
         description.add(
                 name,
-                rating,
-                new Label(String.format("%,d", worker.getUserRatings()) + " User Ratings")
+                username,
+                new Label("Rating - " + worker.getRating()),
+                new Label(String.format("%,d", worker.getUserRatings()) + " User Ratings"),
+                new Label("Location - " + worker.getLocation()),
+                new Label("Email - " + worker.getEmail()),
+                new Label("Mobile Number - " + worker.getMobile()),
+                new Label("Address - " + worker.getAddress())
+
         );
         description.setPadding(true);
-        card.add(image, description, selectWorker);
+        card.add(image, description, deleteWorker);
 
         return card;
     }
 
-
-    @Override
-    public void afterNavigation(AfterNavigationEvent event) {
+    private void updateView() {
+        grid.setItems(userRepository.getAllByRole(Role.WORKER));
     }
-
-
-
 }

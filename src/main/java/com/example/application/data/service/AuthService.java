@@ -3,6 +3,7 @@ package com.example.application.data.service;
 import com.example.application.data.entity.Role;
 import com.example.application.data.entity.User;
 import com.example.application.views.admin.AdminView;
+import com.example.application.views.admin.AdminWorkerView;
 import com.example.application.views.dashboard.DashboardView;
 import com.example.application.views.home.HomeView;
 import com.example.application.views.logout.LogoutView;
@@ -23,6 +24,8 @@ import java.util.List;
 @Service
 public class AuthService {
 
+
+
     public record AuthorizedRoute(String route, String name, Class<? extends Component> view) {
 
     }
@@ -33,10 +36,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final MailSender mailSender;
+    private final ParkingSlotRepository parkingSlotRepository;
 
-    public AuthService(UserRepository userRepository, MailSender mailSender) {
+    public AuthService(UserRepository userRepository, MailSender mailSender, ParkingSlotRepository parkingSlotRepository) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
+        this.parkingSlotRepository = parkingSlotRepository;
     }
 
     public void authenticate(String username, String password) throws AuthException {
@@ -67,7 +72,7 @@ public class AuthService {
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
-            routes.add(new AuthorizedRoute("admin", "Admin", AdminView.class));
+            routes.add(new AuthorizedRoute("admin", "Admin", AdminWorkerView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
         } else if (role.equals(Role.WORKER)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
@@ -82,16 +87,23 @@ public class AuthService {
     }
 
     public void register(String firstName, String lastName, String username, String password,
-                         String address, String mobile, String email, String registrationNumber) {
-        User user = userRepository.save(new User(firstName, lastName, username, password, Role.USER,
+                         String address, String mobile, String email, String registrationNumber, Role role) {
+        User user = userRepository.save(new User(firstName, lastName, username, password, role,
                 address, mobile, email, registrationNumber));
-        String text = "http://localhost:8080/activate?code=" + user.getActivationCode();
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@example.com");
-        message.setSubject("Confirmation email");
-        message.setText(text);
-        message.setTo(email);
-        mailSender.send(message);
+
+        if(role == Role.USER) {
+            String text = "http://localhost:8080/activate?code=" + user.getActivationCode();
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("noreply@example.com");
+            message.setSubject("Confirmation email");
+            message.setText(text);
+            message.setTo(email);
+            mailSender.send(message);
+        }
+        else if(role == Role.WORKER){
+            user.setActive(true);
+            parkingSlotRepository.getByName(user.getLocation()).addWorker(user);
+        }
     }
 
     public void activate(String activationCode) throws AuthException {
@@ -102,6 +114,12 @@ public class AuthService {
         } else {
             throw new AuthException();
         }
+    }
+
+    public List<String> getLocations() {
+        ArrayList<String> names = new ArrayList<>();
+        parkingSlotRepository.findAll().forEach(slot -> names.add(slot.getName()));
+        return names;
     }
 
 }

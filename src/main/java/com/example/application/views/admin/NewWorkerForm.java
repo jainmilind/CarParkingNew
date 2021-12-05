@@ -1,9 +1,11 @@
-package com.example.application.views.login;
+package com.example.application.views.admin;
 
 import com.example.application.data.entity.Role;
 import com.example.application.data.service.AuthService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
@@ -13,19 +15,23 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
-@Route("register")
-public class RegisterView extends VerticalLayout {
+@PageTitle("Add User")
+@Route("new-user-form")
+public class NewWorkerForm extends VerticalLayout {
 
     private final AuthService authService;
-//    private Component formLayout;
-    public RegisterView(AuthService authService) {
+
+    public NewWorkerForm(AuthService authService) {
         this.authService = authService;
 
-        H2 title = new H2("Signup Form");
+        H2 title = new H2("New Worker Form");
 
         TextField firstName = new TextField("First Name");
         TextField lastName = new TextField("Last Name");
@@ -35,7 +41,10 @@ public class RegisterView extends VerticalLayout {
         TextArea address = new TextArea("Residential address");
         EmailField email = new EmailField("Email ID");
         TextField mobile = new TextField("Mobile number");
-        TextField registrationNumber = new TextField("Car registration number");
+        ComboBox<String> locations = new ComboBox<>("Location");
+
+
+        locations.setItems(authService.getLocations());
 
         Span errorMessage = new Span();
 
@@ -48,7 +57,7 @@ public class RegisterView extends VerticalLayout {
                         address.getValue(),
                         mobile.getValue(),
                         email.getValue(),
-                        registrationNumber.getValue()
+                        locations.getValue()
                 ));
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
@@ -56,7 +65,7 @@ public class RegisterView extends VerticalLayout {
         // logic (validation, etc.), but it allows us to configure Responsiveness from
         // Java code and its defaults looks nicer than just using a VerticalLayout.
         FormLayout formLayout = new FormLayout(title, firstName, lastName, username, password1, password2,
-                address, email, mobile, registrationNumber,submitButton);
+                address, email, mobile, locations,submitButton);
 
         // Restrict maximum width and center on page
         formLayout.setMaxWidth("500px");
@@ -113,8 +122,8 @@ public class RegisterView extends VerticalLayout {
         if (validateFields(firstName, lastName, username, password1, password2,
                 address, mobile, email, registrationNumber)) {
             authService.register(firstName, lastName, username, password1,
-                address, mobile, email, registrationNumber, Role.USER);
-            Notification.show("Check your email.");
+                address, mobile, email, registrationNumber, Role.WORKER);
+            UI.getCurrent().navigate(AdminWorkerView.class);
         }
     }
 }
