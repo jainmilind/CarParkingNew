@@ -9,7 +9,6 @@ import com.example.application.views.logout.LogoutView;
 import com.example.application.views.main.MainView;
 import com.example.application.views.worker.WorkerView;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.mail.MailSender;
@@ -42,7 +41,6 @@ public class AuthService {
         User user = userRepository.getByUsername(username);
         if (user != null && user.checkPassword(password) && user.isActive()) {
             VaadinSession.getCurrent().setAttribute(User.class, user);
-            Notification.show("Not null: " + (user != null));
             createRoutes(user.getRole());
         } else {
             throw new AuthException();

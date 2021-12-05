@@ -6,8 +6,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 public class User extends AbstractEntity {
@@ -25,7 +23,8 @@ public class User extends AbstractEntity {
     private String activationCode;
     private boolean active;
     private double rating;
-    public Map<String, Integer> services;
+    private int[] prices;
+    private String[] services;
     private String location;
 
     public User() {
@@ -47,15 +46,26 @@ public class User extends AbstractEntity {
         if (role == Role.WORKER) {
             this.location = last;
             this.rating = -1;
-            this.services = new HashMap<String, Integer>() {{
-                put("Dry Cleaning", 250);
-                put("Car Washing", 500);
-                put("Disc Tuning", 500);
-                put("Engine Oil Replacement", 250);
-                put("Oil Filter Replacement", 150);
-                put("AC Filter Cleaning", 100);
-                put("Brake Fluid Top-Up", 100);
-            }};
+            setServices(new String[] {
+                    "Dry Cleaning",
+                    "Car Washing",
+                    "Disc Tuning",
+                    "Engine Oil Replacement",
+                    "Oil Filter Replacement",
+                    "AC Filter Cleaning",
+                    "Brake Fluid Top-Up"
+            });
+            setPrices(new int[] {
+                    250, 500, 500, 250, 150, 100, 100
+            });
+//            services.putIfAbsent(this.username, new HashMap<>());
+//            services.get(this.username).put("Dry Cleaning", 250);
+//            services.get(this.username).put("Car Washing", 500);
+//            services.get(this.username).put("Disc Tuning", 500);
+//            services.get(this.username).put("Engine Oil Replacement", 250);
+//            services.get(this.username).put("Oil Filter Replacement", 150);
+//            services.get(this.username).put("AC Filter Cleaning", 100);
+//            services.get(this.username).put("Brake Fluid Top-Up", 100);
         } else {
             this.registrationNumber = last;
         }
@@ -178,11 +188,24 @@ public class User extends AbstractEntity {
         this.location = location;
     }
 
-//    public Integer getServices(String service) {
-//        return services[service];
-//    }
-//
-//    public void setServices(Map<String,Integer> services) {
-//
-//    }
+    public int[] getPrices() {
+        return prices;
+    }
+
+    public void setPrices(int[] prices) {
+        this.prices = prices;
+    }
+
+    public void setPrices(int index, int value) {
+        prices[index] = value;
+    }
+
+    public String[] getServices() {
+        return services;
+    }
+
+    public void setServices(String[] services) {
+        this.services = services;
+    }
+
 }
