@@ -137,6 +137,8 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
         description.setPadding(true);
         card.add(image, description, bookSlot);
 
+        ComponentUtil.setData(UI.getCurrent(), Integer.class, getDuration(p));
+
         return card;
     }
 

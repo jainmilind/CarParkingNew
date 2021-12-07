@@ -10,6 +10,7 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.*;
@@ -26,13 +27,23 @@ public class AdminWorkerView extends VerticalLayout {
     Grid<User> grid = new Grid<>();
     UserRepository userRepository;
     ParkingSlotRepository parkingSlotRepository;
-
+    ConfirmDialog dialog = new ConfirmDialog();
 
 
     public AdminWorkerView(UserRepository userRepository, ParkingSlotRepository parkingSlotRepository) {
 
         this.userRepository = userRepository;
         this.parkingSlotRepository = parkingSlotRepository;
+
+
+        dialog.setHeader("Logout");
+
+        dialog.setCancelable(true);
+        dialog.addCancelListener(event -> dialog.close());
+
+        dialog.setConfirmText("Yes");
+        dialog.setConfirmButtonTheme("error primary");
+
 
         setId("home-view");
         addClassName("home-view");
@@ -63,6 +74,16 @@ public class AdminWorkerView extends VerticalLayout {
         card.setSpacing(false);
         card.getThemeList().add("spacing-s");
 
+        dialog.setText("Are you sure you want to remove" + worker.retName() + "?");
+
+        dialog.addConfirmListener(event -> {
+            ParkingSlot parkingSlot = parkingSlotRepository.getByName(worker.getLocation());
+            parkingSlot.removeWorker(worker);
+            userRepository.delete(worker);
+            updateView();
+            dialog.close();
+        });
+
         Image image = new Image();
         image.setSrc("images/worker.png");
         VerticalLayout description = new VerticalLayout();
@@ -81,10 +102,7 @@ public class AdminWorkerView extends VerticalLayout {
         deleteWorker.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
         deleteWorker.setWidth("25%");
         deleteWorker.addClickListener(e -> {
-            ParkingSlot parkingSlot = parkingSlotRepository.getByName(worker.getLocation());
-            parkingSlot.removeWorker(worker);
-            userRepository.delete(worker);
-            updateView();
+            dialog.open();
         });
 
         HorizontalLayout actions = new HorizontalLayout();

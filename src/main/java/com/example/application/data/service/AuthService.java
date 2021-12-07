@@ -79,6 +79,8 @@ public class AuthService {
             routes.add(new AuthorizedRoute("car-service-selection", "Select Services", CarServiceSelectionView.class));
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
+            routes.add(new AuthorizedRoute("worker-selection", "Select Worker", WorkerSelectionView.class));
+            routes.add(new AuthorizedRoute("bill-summary", "Bill Summary", BillSummaryView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
             routes.add(new AuthorizedRoute("all-workers-view", "Worker View", AdminWorkerView.class));
             routes.add(new AuthorizedRoute("all-parking-view", "Parking Slots", AdminParkingView.class));
