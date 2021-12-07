@@ -16,14 +16,10 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
-@PageTitle("Add User")
-@Route("new-user-form")
+@PageTitle("Add Worker")
 public class NewWorkerForm extends VerticalLayout {
 
     private final AuthService authService;
@@ -107,11 +103,11 @@ public class NewWorkerForm extends VerticalLayout {
         } else if (!password1.equals(password2)) {
             Notification.show("Passwords don't match");
             return false;
-        } else if (!Pattern.matches("[0-9]{10}", mobile)) {
-            Notification.show("Enter a valid mobile number");
-            return false;
         } else if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", email)) {
             Notification.show("Enter a valid email ID");
+            return false;
+        } else if (!Pattern.matches("[0-9]{10}", mobile)) {
+            Notification.show("Enter a valid mobile number");
             return false;
         }
         return true;

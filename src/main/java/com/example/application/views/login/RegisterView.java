@@ -98,11 +98,11 @@ public class RegisterView extends VerticalLayout {
         } else if (!password1.equals(password2)) {
             Notification.show("Passwords don't match");
             return false;
-        } else if (!Pattern.matches("[0-9]{10}", mobile)) {
-            Notification.show("Enter a valid mobile number");
-            return false;
         } else if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", email)) {
             Notification.show("Enter a valid email ID");
+            return false;
+        } else if (!Pattern.matches("[0-9]{10}", mobile)) {
+            Notification.show("Enter a valid mobile number");
             return false;
         }
         return true;

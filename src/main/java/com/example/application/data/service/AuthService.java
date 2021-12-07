@@ -4,8 +4,12 @@ import com.example.application.data.entity.Role;
 import com.example.application.data.entity.User;
 import com.example.application.views.admin.AdminParkingView;
 import com.example.application.views.admin.AdminWorkerView;
+import com.example.application.views.admin.NewWorkerForm;
 import com.example.application.views.dashboard.DashboardView;
+import com.example.application.views.home.BillSummaryView;
+import com.example.application.views.home.CarServiceSelectionView;
 import com.example.application.views.home.HomeView;
+import com.example.application.views.home.WorkerSelectionView;
 import com.example.application.views.logout.LogoutView;
 import com.example.application.views.main.MainView;
 import com.example.application.views.worker.WorkerPendingServiceView;
@@ -14,7 +18,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,6 @@ import java.util.List;
 
 @Service
 public class AuthService {
-
 
 
     public record AuthorizedRoute(String route, String name, Class<? extends Component> view) {
@@ -51,8 +53,8 @@ public class AuthService {
             VaadinSession.getCurrent().setAttribute(User.class, user);
             createRoutes(user.getRole());
         } else {
-            if(user == null) Notification.show("User doesnt exist");
-            else if(!user.checkPassword(password)) Notification.show("Wrong password");
+            if (user == null) Notification.show("User doesnt exist");
+            else if (!user.checkPassword(password)) Notification.show("Wrong password");
             else Notification.show("User not active");
             throw new AuthException();
         }
@@ -72,13 +74,16 @@ public class AuthService {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
-
+            routes.add(new AuthorizedRoute("worker-selection", "Select Worker", WorkerSelectionView.class));
+            routes.add(new AuthorizedRoute("bill-summary", "Bill Summary", BillSummaryView.class));
+            routes.add(new AuthorizedRoute("car-service-selection", "Select Services", CarServiceSelectionView.class));
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
             routes.add(new AuthorizedRoute("all-workers-view", "Worker View", AdminWorkerView.class));
             routes.add(new AuthorizedRoute("all-parking-view", "Parking Slots", AdminParkingView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
+            routes.add(new AuthorizedRoute("new-worker-form", "New Worker", NewWorkerForm.class));
         } else if (role.equals(Role.WORKER)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
@@ -96,7 +101,7 @@ public class AuthService {
         User user = new User(firstName, lastName, username, password, role,
                 address, mobile, email, registrationNumber);
 
-        if(role == Role.USER) {
+        if (role == Role.USER) {
             String text = "http://localhost:8080/activate?code=" + user.getActivationCode();
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("noreply@example.com");
@@ -104,8 +109,7 @@ public class AuthService {
             message.setText(text);
             message.setTo(email);
             mailSender.send(message);
-        }
-        else if(role == Role.WORKER){
+        } else if (role == Role.WORKER) {
             user.setActive(true);
             parkingSlotRepository.getByName(user.getLocation()).addWorker(user);
         }

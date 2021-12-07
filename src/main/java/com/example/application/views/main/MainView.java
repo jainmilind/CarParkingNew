@@ -20,6 +20,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -81,9 +83,18 @@ public class MainView extends AppLayout {
 
     private Component[] createMenuItems() {
         var user = VaadinSession.getCurrent().getAttribute(User.class);
-        return authService.getAuthorizedRoutes(user.getRole()).stream()
-                .map(r -> createTab(r.name(), r.view()))
-                .toArray(Component[]::new);
+        List<AuthService.AuthorizedRoute> authorizedRoutes = authService.getAuthorizedRoutes(user.getRole());
+        List<Tab> menuItems = new ArrayList<>();
+        for (AuthService.AuthorizedRoute ar : authorizedRoutes) {
+            if (!ar.name().equals("Select Worker") && !ar.name().equals("Bill Summary")
+                    && !ar.name().equals("New Worker") && !ar.name().equals("Select Services")) {
+                menuItems.add(createTab(ar.name(), ar.view()));
+            }
+        }
+        return menuItems.toArray(Component[]::new);
+//        return authService.getAuthorizedRoutes(user.getRole()).stream()
+//                .map(r -> createTab(r.name(), r.view()))
+//                .toArray(Component[]::new);
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

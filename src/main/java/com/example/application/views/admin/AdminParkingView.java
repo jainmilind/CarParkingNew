@@ -1,14 +1,11 @@
 package com.example.application.views.admin;
 
 import com.example.application.data.entity.ParkingSlot;
-import com.example.application.data.entity.User;
-import com.example.application.data.service.ParkingSlotRepository;
 import com.example.application.data.service.ParkingSlotService;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -20,9 +17,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.router.PageTitle;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.artur.helpers.CrudServiceDataProvider;
 
@@ -103,7 +98,7 @@ public class AdminParkingView extends Div {
                 clearForm();
                 refreshGrid();
             } catch (ValidationException validationException) {
-                Notification.show("An exception happened while trying to store the person details.");
+                Notification.show("An exception happened while trying to store the parking-slot details.");
             }
         });
 

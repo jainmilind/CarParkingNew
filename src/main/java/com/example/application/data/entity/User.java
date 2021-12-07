@@ -51,7 +51,7 @@ public class User extends AbstractEntity {
         servicesSelected.putIfAbsent(username, new ArrayList<>());
         if (this.role == Role.WORKER) {
             this.location = last;
-            this.rating = -1;
+            this.rating = 4.0;
             services.putIfAbsent(username, new ArrayList<>());
             services.get(username).add(new CarService("Dry Cleaning", 250));
             services.get(username).add(new CarService("Car Washing", 500));
@@ -60,10 +60,9 @@ public class User extends AbstractEntity {
             services.get(username).add(new CarService("Oil Filter Replacement", 150));
             services.get(username).add(new CarService("AC Filter Cleaning", 100));
             services.get(username).add(new CarService("Brake Fluid Top-Up", 100));
-            this.userRatings = 0;
+            this.userRatings = 5;
             this.registrationNumber = "";
         } else {
-
             this.registrationNumber = last;
         }
     }

@@ -7,23 +7,22 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.*;
+import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.Command;
 import com.vaadin.flow.server.VaadinSession;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 import elemental.json.impl.JreJsonFactory;
 import org.vaadin.jonni.PaymentRequest;
-import org.vaadin.jonni.PaymentRequest.*;
+import org.vaadin.jonni.PaymentRequest.PaymentResponse;
 
 
-@Route("bill-summary")
 @PageTitle("Bill Summary")
 public class BillSummaryView extends VerticalLayout {
 
@@ -45,9 +44,9 @@ public class BillSummaryView extends VerticalLayout {
                 new H4("Parking - " + parkingSlot.getPrice())
         );
 
-        addServicesCost();
+        int serviceCost = addServicesCost();
 
-        totalCost += parkingSlot.getPrice();
+        totalCost = serviceCost + parkingSlot.getPrice();
 
         add(new H4("Total -  " + totalCost));
 
@@ -61,8 +60,11 @@ public class BillSummaryView extends VerticalLayout {
 
         buttons.addComponentAtIndex(0, back);
         buttons.addComponentAtIndex(1, next);
-
-        back.addClickListener(e -> UI.getCurrent().navigate(CarServiceSelectionView.class));
+		if (serviceCost > 0) {
+	        back.addClickListener(e -> UI.getCurrent().navigate(CarServiceSelectionView.class));
+		} else {
+			back.addClickListener(e -> UI.getCurrent().navigate(WorkerSelectionView.class));
+		}
 
         homeButton.setVisible(false);
         homeButton.addThemeVariants();
@@ -81,11 +83,13 @@ public class BillSummaryView extends VerticalLayout {
 
     }
 
-    private void addServicesCost() {
+    private int addServicesCost() {
+		int serviceCost = 0;
         for (CarService carService : User.servicesSelected.get(customer.getUsername())) {
             add(new H4(carService.getServiceName() + " - " + carService.getServiceCharge()));
-            totalCost += carService.getServiceCharge();
+            serviceCost += carService.getServiceCharge();
         }
+		return serviceCost;
     }
 
     private void addPaymentRequestHandlerToButton() {
@@ -96,7 +100,7 @@ public class BillSummaryView extends VerticalLayout {
 		PaymentRequest paymentRequest = new PaymentRequest(supportedPaymentMethods, paymentDetails);
 		paymentRequest.setPaymentResponseCallback((paymentResponse) -> {
 			JsonObject eventData = paymentResponse.getEventData();
-			Notification.show("Please wait a moment while we finish the payment via our payment gateway.", 1000,
+			Notification.show("Please wait a moment while we finish the payment via our payment gateway.", 2000,
 					Position.MIDDLE);
 
 			Command onPaymentGatewayRequestComplete = () -> {
@@ -105,8 +109,10 @@ public class BillSummaryView extends VerticalLayout {
 				String cardNumber = eventData.getObject("details").getString("cardNumber");
 				String cardEnding = cardNumber.substring(cardNumber.length() - 4);
 				Notification
-						.show("Purchase complete! We have charged the total (" + totalCost + ") from your credit card ending in "
+						.show("Purchase complete! \nWe have charged the total (Rs." + totalCost + ") from your credit card ending in "
 								+ cardEnding, 2000, Position.MIDDLE);
+				back.setVisible(false);
+				next.setVisible(false);
                 homeButton.setVisible(true);
 			};
 			startPaymentGatewayQuery(paymentResponse, eventData, onPaymentGatewayRequestComplete);

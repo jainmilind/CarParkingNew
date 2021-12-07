@@ -19,21 +19,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
 import java.util.ArrayList;
 
-@PageTitle("Select Service")
-@Route("car-service-selection")
+@PageTitle("Select Services")
 @CssImport(value = "./styles/views/home/home-view.css", include = "lumo-badge")
 @JsModule("@vaadin/vaadin-lumo-styles/badge.js")
-public class CarServiceSelectionView extends VerticalLayout implements AfterNavigationObserver{
+public class CarServiceSelectionView extends VerticalLayout implements AfterNavigationObserver {
 
     Grid<CarService> grid = new Grid<>();
     User customer;
     User worker;
-
 
 
     public CarServiceSelectionView() {
@@ -140,8 +137,7 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
     }
 
 
-
-    private void updateGrid(){
+    private void updateGrid() {
 
     }
 
