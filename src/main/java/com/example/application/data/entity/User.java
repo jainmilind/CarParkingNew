@@ -48,6 +48,7 @@ public class User extends AbstractEntity {
         this.address = address;
         this.mobile = mobile;
         this.email = email;
+        servicesSelected.putIfAbsent(username, new ArrayList<>());
         if (this.role == Role.WORKER) {
             this.location = last;
             this.rating = -1;
@@ -198,7 +199,7 @@ public class User extends AbstractEntity {
 
     public void addCarService(CarService carService){
 
-        servicesSelected.putIfAbsent(username, new ArrayList<>());
+
         servicesSelected.get(username).add(carService);
     }
 

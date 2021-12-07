@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class WorkerView extends VerticalLayout {
 
     public WorkerView() {
-        //TODO: Fix null pointer exception for Worker
+
         H2 title = new H2("My Services");
         add(title);
         User worker = VaadinSession.getCurrent().getAttribute(User.class);

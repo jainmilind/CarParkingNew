@@ -33,7 +33,10 @@ public class WorkerPendingServiceView extends VerticalLayout {
         grid.addComponentColumn(this::createCard);
 
         ArrayList<CarService> services = User.servicesSelected.get(worker.getUsername());
-        grid.setItems(services);
+        if(services != null)
+            grid.setItems(services);
+        else
+            grid.setItems(new ArrayList<>());
 
         add(
                 new H2("Services To Do"),

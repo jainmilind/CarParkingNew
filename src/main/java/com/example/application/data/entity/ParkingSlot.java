@@ -33,6 +33,9 @@ public class ParkingSlot extends AbstractEntity {
 
 
     public ParkingSlot() {
+        this.image = "images/parking_slot.png";
+        workers.putIfAbsent(name, new ArrayList<>());
+        spotsBooked.putIfAbsent(name, new HashMap<>());
     }
 
     public ParkingSlot(String image, String name, int price, int totalSpots) {
@@ -41,6 +44,7 @@ public class ParkingSlot extends AbstractEntity {
         this.price = price;
         this.totalSpots = totalSpots;
         spotsBooked.putIfAbsent(this.name, new HashMap<>());
+        workers.putIfAbsent(name, new ArrayList<>());
     }
 
     public String getImage() {
@@ -69,6 +73,7 @@ public class ParkingSlot extends AbstractEntity {
 
     public boolean canBook(Pair<LocalDateTime, LocalDateTime> p) {
 
+        spotsBooked.putIfAbsent(name, new HashMap<>());
         for(LocalDateTime time = p.getFirst(); time.isBefore(p.getSecond()); time = time.plusHours(1)){
             spotsBooked.get(name).putIfAbsent(time, 0);
             if(spotsBooked.get(name).get(time) >= totalSpots){
@@ -124,7 +129,6 @@ public class ParkingSlot extends AbstractEntity {
     }
 
     public void addWorker(User user){
-        workers.putIfAbsent(name, new ArrayList<>());
         workers.get(name).add(user);
     }
 

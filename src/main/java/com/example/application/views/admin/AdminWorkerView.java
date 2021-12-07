@@ -3,6 +3,7 @@ package com.example.application.views.admin;
 import com.example.application.data.entity.ParkingSlot;
 import com.example.application.data.entity.Role;
 import com.example.application.data.entity.User;
+import com.example.application.data.service.ParkingSlotRepository;
 import com.example.application.data.service.UserRepository;
 import com.example.application.views.home.CarServiceSelectionView;
 import com.vaadin.flow.component.ComponentUtil;
@@ -24,15 +25,14 @@ public class AdminWorkerView extends VerticalLayout {
 
     Grid<User> grid = new Grid<>();
     UserRepository userRepository;
-    ParkingSlot parkingSlot;
-    //TODO: Remove the vaadin session attribute
+    ParkingSlotRepository parkingSlotRepository;
 
 
 
-    public AdminWorkerView(UserRepository userRepository) {
+    public AdminWorkerView(UserRepository userRepository, ParkingSlotRepository parkingSlotRepository) {
 
         this.userRepository = userRepository;
-        parkingSlot = ComponentUtil.getData(UI.getCurrent(), ParkingSlot.class);
+        this.parkingSlotRepository = parkingSlotRepository;
 
         setId("home-view");
         addClassName("home-view");
@@ -81,6 +81,7 @@ public class AdminWorkerView extends VerticalLayout {
         deleteWorker.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
         deleteWorker.setWidth("25%");
         deleteWorker.addClickListener(e -> {
+            ParkingSlot parkingSlot = parkingSlotRepository.getByName(worker.getLocation());
             parkingSlot.removeWorker(worker);
             userRepository.delete(worker);
             updateView();

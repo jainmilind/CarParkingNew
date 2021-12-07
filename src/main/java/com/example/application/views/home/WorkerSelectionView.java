@@ -31,7 +31,6 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
     Grid<User> grid = new Grid<>();
     UserRepository workerRepository;
     ParkingSlot parkingSlot;
-    //TODO: Remove the vaadin session attribute
 
 
 
@@ -50,11 +49,23 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
         ArrayList<User> workers = ParkingSlot.workers.get(parkingSlot.getName());
         if(workers != null)
             grid.setItems(ParkingSlot.workers.get(parkingSlot.getName()));
+        else
+            grid.setItems(new ArrayList<>());
+
+        int workersCnt = ParkingSlot.workers.get(parkingSlot.getName()) == null ? 0 : ParkingSlot.workers.get(parkingSlot.getName()).size();
+
+        Button skipButton = new Button("Skip to Payment");
+        skipButton.addClickListener(e -> UI.getCurrent().navigate(BillSummaryView.class));
+        skipButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        VerticalLayout skip = new VerticalLayout(skipButton);
+        skip.setAlignItems(Alignment.END);
 
         add(
                 new H2(parkingSlot.getName()),
-                new H4("Select Worker - " + ParkingSlot.workers.get(parkingSlot.getName()).size() + " workers"),
-                grid
+                new H4("Select Worker - " + workersCnt + " workers"),
+                grid,
+                skip
         );
     }
 
@@ -84,8 +95,6 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
         selectWorker.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         selectWorker.setWidth("25%");
         selectWorker.addClickListener(e -> {
-            //TODO: Implement navigation to payment and services view
-            Notification.show("Worker " + worker.retName() + " selected");
             ComponentUtil.setData(UI.getCurrent(), User.class, worker);
             UI.getCurrent().navigate(CarServiceSelectionView.class);
         });

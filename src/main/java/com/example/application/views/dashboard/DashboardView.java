@@ -17,7 +17,7 @@ import com.vaadin.flow.server.VaadinSession;
 @PageTitle("Dashboard")
 public class DashboardView extends Div {
     public DashboardView() {
-        //TODO: Fix null pointer exception for Worker
+
         User user = VaadinSession.getCurrent().getAttribute(User.class);
         System.out.println(user.getRole());
         TextField role = new TextField("Role");

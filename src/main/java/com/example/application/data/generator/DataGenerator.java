@@ -32,8 +32,8 @@ public class DataGenerator {
             newWorker.setActive(true);
             userRepository.save(newWorker);
 
-            parkingSlotRepository.save(new ParkingSlot("images/RGIA.jpg", "Rajiv Gandhi International Airport", 200, 10));
-            parkingSlotRepository.save(new ParkingSlot("images/BITS.jfif", "BITS Pilani Hyderabad Campus", 150, 20));
+            parkingSlotRepository.save(new ParkingSlot("images/RGIA.jpg", "Rajiv Gandhi International Airport", 25, 10));
+            parkingSlotRepository.save(new ParkingSlot("images/BITS.jfif", "BITS Pilani Hyderabad Campus", 30, 20));
 
             parkingSlotRepository.getByName("Rajiv Gandhi International Airport").addWorker(newWorker);
         };

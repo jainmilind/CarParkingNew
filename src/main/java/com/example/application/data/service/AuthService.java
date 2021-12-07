@@ -2,7 +2,7 @@ package com.example.application.data.service;
 
 import com.example.application.data.entity.Role;
 import com.example.application.data.entity.User;
-import com.example.application.views.admin.AdminView;
+import com.example.application.views.admin.AdminParkingView;
 import com.example.application.views.admin.AdminWorkerView;
 import com.example.application.views.dashboard.DashboardView;
 import com.example.application.views.home.HomeView;
@@ -14,6 +14,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,9 @@ public class AuthService {
             VaadinSession.getCurrent().setAttribute(User.class, user);
             createRoutes(user.getRole());
         } else {
+            if(user == null) Notification.show("User doesnt exist");
+            else if(!user.checkPassword(password)) Notification.show("Wrong password");
+            else Notification.show("User not active");
             throw new AuthException();
         }
     }
@@ -72,7 +76,8 @@ public class AuthService {
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
-            routes.add(new AuthorizedRoute("admin", "Admin", AdminWorkerView.class));
+            routes.add(new AuthorizedRoute("all-workers-view", "Worker View", AdminWorkerView.class));
+            routes.add(new AuthorizedRoute("all-parking-view", "Parking Slots", AdminParkingView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
         } else if (role.equals(Role.WORKER)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
@@ -88,8 +93,8 @@ public class AuthService {
 
     public void register(String firstName, String lastName, String username, String password,
                          String address, String mobile, String email, String registrationNumber, Role role) {
-        User user = userRepository.save(new User(firstName, lastName, username, password, role,
-                address, mobile, email, registrationNumber));
+        User user = new User(firstName, lastName, username, password, role,
+                address, mobile, email, registrationNumber);
 
         if(role == Role.USER) {
             String text = "http://localhost:8080/activate?code=" + user.getActivationCode();
@@ -104,6 +109,8 @@ public class AuthService {
             user.setActive(true);
             parkingSlotRepository.getByName(user.getLocation()).addWorker(user);
         }
+
+        userRepository.save(user);
     }
 
     public void activate(String activationCode) throws AuthException {

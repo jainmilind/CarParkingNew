@@ -99,7 +99,7 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
         selectService.setWidth("25%");
         selectService.setVisible(
                 User.servicesSelected.get(customer.getUsername()) == null
-                        || User.servicesSelected.get(customer.getUsername()).contains(carService));
+                        || !User.servicesSelected.get(customer.getUsername()).contains(carService));
 
         Button unselectService = new Button("Unselect");
         unselectService.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
@@ -107,7 +107,6 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
         unselectService.setVisible(!selectService.isVisible());
 
         selectService.addClickListener(e -> {
-            //TODO: Implement navigation to payment view
             selectService.setVisible(false);
             unselectService.setVisible(true);
             worker.addCarService(carService);
@@ -115,7 +114,6 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
         });
 
         unselectService.addClickListener(e -> {
-            //TODO: Implement navigation to payment view
             unselectService.setVisible(false);
             selectService.setVisible(true);
             worker.removeCarService(carService);
