@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/Sai Panda/IdeaProjects/CarParkingNew/src</OriginalElement>
+  <nodes>
+    <node x="761.0" y="1495.0">com.example.application.data.service.UserRepository</node>
+    <node x="1073.0" y="1495.0">com.example.application.data.service.ParkingSlotRepository</node>
+    <node x="1240.0" y="880.0">com.example.application.views.home.WorkerSelectionView</node>
+    <node x="199.0" y="1632.0">com.example.application.views.logout.LogoutView</node>
+    <node x="0.0" y="195.0">com.example.application.data.entity.User</node>
+    <node x="1205.0" y="1279.0">com.example.application.views.worker.WorkerPendingServiceView</node>
+    <node x="0.0" y="880.0">com.example.application.views.main.MainView</node>
+    <node x="322.0" y="1279.0">com.example.application.views.home.BillSummaryView</node>
+    <node x="0.0" y="1632.0">com.example.application.views.worker.WorkerView</node>
+    <node x="397.0" y="1632.0">com.example.application.views.admin.AdminView</node>
+    <node x="495.0" y="430.0">com.example.application.data.entity.CarService</node>
+    <node x="870.0" y="880.0">com.example.application.views.home.CarServiceSelectionView</node>
+    <node x="713.0" y="312.0">com.example.application.data.entity.ParkingSlot</node>
+    <node x="1201.5" y="0.0">com.example.application.data.service.AuthService</node>
+    <node x="1625.0" y="1495.0">com.example.application.views.dashboard.DashboardView</node>
+    <node x="1196.0" y="378.0">com.example.application.data.service.AuthService.AuthException</node>
+    <node x="1370.0" y="1495.0">com.example.application.views.login.LoginView</node>
+    <node x="491.5" y="0.0">com.example.application.data.AbstractEntity</node>
+    <node x="0.0" y="1279.0">com.example.application.views.login.ActivationView</node>
+    <node x="1610.0" y="880.0">com.example.application.data.entity.Role</node>
+    <node x="572.0" y="1279.0">com.example.application.views.login.RegisterView</node>
+    <node x="540.0" y="1495.0">com.example.application.Application</node>
+    <node x="431.0" y="880.0">com.example.application.views.home.HomeView</node>
+    <node x="1389.0" y="299.0">com.example.application.data.service.AuthService.AuthorizedRoute</node>
+    <node x="0.0" y="1495.0">com.example.application.data.generator.DataGenerator</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.application.data.entity.ParkingSlot" target="com.example.application.data.AbstractEntity" relationship="GENERALIZATION">
+      <point x="0.0" y="-203.0" />
+      <point x="932.0" y="170.0" />
+      <point x="594.0" y="170.0" />
+      <point x="0.0" y="72.5" />
+    </edge>
+    <edge source="com.example.application.data.service.AuthService.AuthException" target="com.example.application.data.service.AuthService" relationship="INNER_CLASS">
+      <point x="0.0" y="-32.5" />
+      <point x="1282.5" y="274.0" />
+      <point x="1444.0" y="274.0" />
+      <point x="0.0" y="124.5" />
+    </edge>
+    <edge source="com.example.application.data.service.AuthService.AuthorizedRoute" target="com.example.application.data.service.AuthService" relationship="INNER_CLASS">
+      <point x="0.0" y="-111.5" />
+      <point x="1605.5" y="274.0" />
+      <point x="1444.0" y="274.0" />
+      <point x="0.0" y="124.5" />
+    </edge>
+    <edge source="com.example.application.data.entity.CarService" target="com.example.application.data.AbstractEntity" relationship="GENERALIZATION">
+      <point x="0.0" y="-85.0" />
+      <point x="0.0" y="72.5" />
+    </edge>
+    <edge source="com.example.application.data.entity.User" target="com.example.application.data.AbstractEntity" relationship="GENERALIZATION">
+      <point x="0.0" y="-320.0" />
+      <point x="237.5" y="170.0" />
+      <point x="594.0" y="170.0" />
+      <point x="0.0" y="72.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="911.0" y="306.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
