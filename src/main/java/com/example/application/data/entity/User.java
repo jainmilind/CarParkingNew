@@ -32,6 +32,7 @@ public class User extends AbstractEntity {
     public static  Map<String, ArrayList<CarService>> servicesSelected = new HashMap<>();
     public static Map<String, ArrayList<Booking>> bookings = new HashMap<>();
     private String location;
+    private int count;
 
     public User() {
     }
@@ -51,6 +52,7 @@ public class User extends AbstractEntity {
         this.email = email;
         servicesSelected.putIfAbsent(username, new ArrayList<>());
         bookings.putIfAbsent(username, new ArrayList<>());
+
 
         if (this.role == Role.WORKER) {
             this.location = last;
@@ -91,6 +93,14 @@ public class User extends AbstractEntity {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public void setLastName(String lastName) {
