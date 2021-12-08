@@ -8,8 +8,10 @@ import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 
 @Route(value = "login")
+@RouteAlias(value = "")
 @PageTitle("Login")
 @CssImport("./styles/views/login/login-view.css")
 public class LoginView extends Composite<LoginOverlay> {

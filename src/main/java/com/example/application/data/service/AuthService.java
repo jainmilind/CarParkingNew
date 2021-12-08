@@ -84,12 +84,18 @@ public class AuthService {
             routes.add(new AuthorizedRoute("all-parking-view", "Parking Slots", AdminParkingView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
             routes.add(new AuthorizedRoute("new-worker-form", "New Worker", NewWorkerForm.class));
+            routes.add(new AuthorizedRoute("worker-selection", "Select Worker", WorkerSelectionView.class));
+            routes.add(new AuthorizedRoute("bill-summary", "Bill Summary", BillSummaryView.class));
+            routes.add(new AuthorizedRoute("car-service-selection", "Select Services", CarServiceSelectionView.class));
         } else if (role.equals(Role.WORKER)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
             routes.add(new AuthorizedRoute("worker", "Manage Prices", WorkerView.class));
             routes.add(new AuthorizedRoute("to-do", "Pending Services", WorkerPendingServiceView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
+            routes.add(new AuthorizedRoute("worker-selection", "Select Worker", WorkerSelectionView.class));
+            routes.add(new AuthorizedRoute("bill-summary", "Bill Summary", BillSummaryView.class));
+            routes.add(new AuthorizedRoute("car-service-selection", "Select Services", CarServiceSelectionView.class));
 
         }
 

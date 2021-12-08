@@ -95,7 +95,7 @@ public class AdminWorkerView extends VerticalLayout {
         description.add(
                 name,
                 username,
-                new Label("Rating - " + worker.getRating()),
+                new Label("Rating - " + String.format("%.2f",worker.getRating())),
                 new Label(String.format("%,d", worker.getUserRatings()) + " User Ratings"),
                 new Label("Location - " + worker.getLocation()),
                 new Label("Email - " + worker.getEmail()),

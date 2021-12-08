@@ -129,6 +129,7 @@ public class ParkingSlot extends AbstractEntity {
     }
 
     public void addWorker(User user){
+        workers.putIfAbsent(name, new ArrayList<>());
         workers.get(name).add(user);
     }
 

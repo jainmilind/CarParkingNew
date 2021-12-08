@@ -41,12 +41,12 @@ public class BillSummaryView extends VerticalLayout {
 
         add(
                 new H1("BILLING SUMMARY"),
-                new H4("Parking - " + parkingSlot.getPrice())
+                new H4("Parking - " + parkingSlot.getPrice() * ComponentUtil.getData(UI.getCurrent(), Integer.class))
         );
 
         int serviceCost = addServicesCost();
 
-        totalCost = serviceCost + parkingSlot.getPrice();
+        totalCost = serviceCost + parkingSlot.getPrice() * ComponentUtil.getData(UI.getCurrent(), Integer.class);
 
         add(new H4("Total -  " + totalCost));
 
@@ -69,6 +69,10 @@ public class BillSummaryView extends VerticalLayout {
         homeButton.setVisible(false);
         homeButton.addThemeVariants();
         homeButton.addClickListener(e -> UI.getCurrent().navigate(HomeView.class));
+
+		next.addClickListener(e -> {
+			User.servicesSelected.get(customer.getUsername()).clear();
+		});
 
         add(buttons, homeButton);
 
