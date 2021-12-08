@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User getByActivationCode(String activationCode);
 
     ArrayList<User> getAllByRole(Role role);
+
+    User getByRegistrationNumber(String registrationNumber);
 }

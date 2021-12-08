@@ -17,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.server.VaadinSession;
 
 import java.util.ArrayList;
 
@@ -28,14 +29,14 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
     Grid<User> grid = new Grid<>();
     UserRepository workerRepository;
     ParkingSlot parkingSlot;
-
+    User customer;
 
 
     public WorkerSelectionView(UserRepository workerRepository) {
 
         this.workerRepository = workerRepository;
         parkingSlot = ComponentUtil.getData(UI.getCurrent(), ParkingSlot.class);
-
+        customer = VaadinSession.getCurrent().getAttribute(User.class);
         setId("home-view");
         addClassName("home-view");
         setSizeFull();
@@ -85,13 +86,14 @@ public class WorkerSelectionView extends VerticalLayout implements AfterNavigati
         Span name = new Span(worker.retName());
         name.addClassName("name");
 
-        Span rating = new Span("Rating - " + worker.getRating());
+        Span rating = new Span("Rating - " + String.format("%.2f",worker.getRating()));
         rating.addClassName("rating");
 
         Button selectWorker = new Button("Select");
         selectWorker.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         selectWorker.setWidth("25%");
         selectWorker.addClickListener(e -> {
+            User.bookings.get(customer.getUsername()).get(0).setWorker(worker);
             ComponentUtil.setData(UI.getCurrent(), User.class, worker);
             UI.getCurrent().navigate(CarServiceSelectionView.class);
         });

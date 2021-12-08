@@ -3,9 +3,10 @@ package com.example.application.data.entity;
 import com.example.application.data.AbstractEntity;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 
 @Entity
-public class CarService extends AbstractEntity {
+public class CarService extends AbstractEntity implements Serializable {
     private String serviceName;
     private int serviceCharge;
     private String carNum;

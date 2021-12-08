@@ -30,6 +30,7 @@ public class User extends AbstractEntity {
     private int userRatings;
     public static  Map<String, ArrayList<CarService>> services = new HashMap<>();
     public static  Map<String, ArrayList<CarService>> servicesSelected = new HashMap<>();
+    public static Map<String, ArrayList<Booking>> bookings = new HashMap<>();
     private String location;
 
     public User() {
@@ -49,6 +50,8 @@ public class User extends AbstractEntity {
         this.mobile = mobile;
         this.email = email;
         servicesSelected.putIfAbsent(username, new ArrayList<>());
+        bookings.putIfAbsent(username, new ArrayList<>());
+
         if (this.role == Role.WORKER) {
             this.location = last;
             this.rating = 4.0;
@@ -65,6 +68,13 @@ public class User extends AbstractEntity {
         } else {
             this.registrationNumber = last;
         }
+    }
+
+    public void updateRatings(int newRating){
+        rating = (rating * (double)userRatings) + (double)newRating;
+        userRatings++;
+        rating /= userRatings;
+        Notification.show("Rating is updated");
     }
 
     public boolean checkPassword(String password) {

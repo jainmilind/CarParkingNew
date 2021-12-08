@@ -1,5 +1,6 @@
 package com.example.application.views.home;
 
+import com.example.application.data.entity.Booking;
 import com.example.application.data.entity.ParkingSlot;
 import com.example.application.data.entity.User;
 import com.example.application.data.service.ParkingSlotRepository;
@@ -40,6 +41,7 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
     DateTimePicker startDateTimePicker;
     DateTimePicker endDateTimePicker;
     ComboBox<String> locations;
+    User customer;
 
 
     public HomeView(ParkingSlotRepository parkingSlotRepository) {
@@ -51,6 +53,7 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
         grid.addComponentColumn(this::createCard);
 
+        customer = VaadinSession.getCurrent().getAttribute(User.class);
 
         startDateTimePicker = new DateTimePicker("Start date and time");
         startDateTimePicker.setValue(LocalDateTime.of(2021, 12, 8, 20, 0, 0));
@@ -107,6 +110,8 @@ public class HomeView extends VerticalLayout implements AfterNavigationObserver 
         bookSlot.setWidth("25%");
         bookSlot.setEnabled(parkingSlot.canBook(p));
         bookSlot.addClickListener(e -> {
+            User.bookings.get(customer.getUsername())
+                    .add(0, new Booking(customer, startDateTimePicker.getValue(), endDateTimePicker.getValue(), parkingSlot));
             parkingSlot.addBooking(p, VaadinSession.getCurrent().getAttribute(User.class));
             ComponentUtil.setData(UI.getCurrent(), ParkingSlot.class, parkingSlot);
             UI.getCurrent().navigate(WorkerSelectionView.class);

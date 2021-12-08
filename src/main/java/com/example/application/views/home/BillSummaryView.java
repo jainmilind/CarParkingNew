@@ -13,6 +13,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.internal.Pair;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.Command;
 import com.vaadin.flow.server.VaadinSession;
@@ -70,9 +71,7 @@ public class BillSummaryView extends VerticalLayout {
         homeButton.addThemeVariants();
         homeButton.addClickListener(e -> UI.getCurrent().navigate(HomeView.class));
 
-		next.addClickListener(e -> {
-			User.servicesSelected.get(customer.getUsername()).clear();
-		});
+		next.addClickListener(e -> User.servicesSelected.get(customer.getUsername()).clear());
 
         add(buttons, homeButton);
 

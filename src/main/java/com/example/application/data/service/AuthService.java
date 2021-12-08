@@ -6,10 +6,7 @@ import com.example.application.views.admin.AdminParkingView;
 import com.example.application.views.admin.AdminWorkerView;
 import com.example.application.views.admin.NewWorkerForm;
 import com.example.application.views.dashboard.DashboardView;
-import com.example.application.views.home.BillSummaryView;
-import com.example.application.views.home.CarServiceSelectionView;
-import com.example.application.views.home.HomeView;
-import com.example.application.views.home.WorkerSelectionView;
+import com.example.application.views.home.*;
 import com.example.application.views.logout.LogoutView;
 import com.example.application.views.main.MainView;
 import com.example.application.views.worker.WorkerPendingServiceView;
@@ -73,6 +70,7 @@ public class AuthService {
         if (role.equals(Role.USER)) {
             routes.add(new AuthorizedRoute("home", "Home", HomeView.class));
             routes.add(new AuthorizedRoute("dashboard", "Profile", DashboardView.class));
+            routes.add(new AuthorizedRoute("my-bookings", "My Bookings", BookingHistoryView.class));
             routes.add(new AuthorizedRoute("logout", "Logout", LogoutView.class));
             routes.add(new AuthorizedRoute("worker-selection", "Select Worker", WorkerSelectionView.class));
             routes.add(new AuthorizedRoute("bill-summary", "Bill Summary", BillSummaryView.class));

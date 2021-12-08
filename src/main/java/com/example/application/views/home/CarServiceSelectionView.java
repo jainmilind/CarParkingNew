@@ -108,6 +108,7 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
             unselectService.setVisible(true);
             worker.addCarService(carService);
             customer.addCarService(carService);
+            User.bookings.get(customer.getUsername()).get(0).addService(carService);
         });
 
         unselectService.addClickListener(e -> {
@@ -115,6 +116,7 @@ public class CarServiceSelectionView extends VerticalLayout implements AfterNavi
             selectService.setVisible(true);
             worker.removeCarService(carService);
             customer.removeCarService(carService);
+            User.bookings.get(customer.getUsername()).get(0).removeService(carService);
         });
 
         buttons.add(selectService, unselectService);
